@@ -1,7 +1,7 @@
 # This is a basic workflow to help you get started with Actions
 
 name: CI
-
+ 
 # Controls when the action will run. 
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
@@ -18,15 +18,45 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: windows
+    runs-on: ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+    - name: Setup .NET Core SDK
+      uses: actions/setup-dotnet@v1.7.2
+      with:
+        # SDK version to use. Examples: 2.2.104, 3.1, 3.1.x
+        dotnet-version: 3.1
+        # Optional package source for which to set up authentication. Will consult any existing NuGet.config in the root of the repo and provide a temporary NuGet.config using the NUGET_AUTH_TOKEN environment variable as a ClearTextPasswor
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+   
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+      
+    - name: Restore Project 
+      run: dotnet restore ASPNETCORE_ForContainering/ASPNETCORE_ForContainering.csproj
+      
+    - name: Build Project 
+      run: dotnet build ASPNETCORE_ForContainering/ASPNETCORE_ForContainering.csproj
+     
+    - name: Publish Project
+      run: dotnet publish ASPNETCORE_ForContainering/ASPNETCORE_ForContainering.csproj --output ./app
 
       # Runs a single command using the runners shell
-      - name: Show me the Directory
-        run: dir
-
+    - name: Show me the Directory
+      run: dir
+      
+    - name: Show me the app dic
+      run: dir ./app
+      
+    - name: Docker Login
+      uses: docker/login-action@v1.8.0
+      with:
+        username: ${{ secrets.DOCKERLOGINNAME }}
+        password: ${{ secrets.DOCKERLOGINPASSWORD }}
+  
+    - name: Docker build
+      run: docker build -t fabihering/aspnetcoreautomativ:latest ./
+    - name: Docker push
+      run: docker push  fabihering/aspnetcoreautomativ:latest 
     
