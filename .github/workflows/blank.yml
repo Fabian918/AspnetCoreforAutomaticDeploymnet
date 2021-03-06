@@ -38,8 +38,14 @@ jobs:
       
     - name: Build Project 
       run: dotnet build ASPNETCORE_ForContainering/ASPNETCORE_ForContainering.csproj
+     
+    - name: Publish Project
+      run: dotnet publish ASPNETCORE_ForContainering/ASPNETCORE_ForContainering.csproj --output ./app
 
       # Runs a single command using the runners shell
     - name: Show me the Directory
       run: dir
+      
+    - name: Show me the app dic
+      run: dir ./app
     
