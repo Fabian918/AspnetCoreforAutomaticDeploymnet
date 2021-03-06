@@ -17,6 +17,13 @@ namespace ASPNETCORE_ForContainering
             return await Task.FromResult($"Hallo {name}!");
         }
 
+        [HttpGet("unhoeflich/{name}")]
+
+        public async Task<string> unhoeflich(string name)
+        {
+            return await Task.FromResult($"Hallo {name} du pisser!");
+        }
+
 
     }
 }
