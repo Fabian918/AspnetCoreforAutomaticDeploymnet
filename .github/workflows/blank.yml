@@ -29,7 +29,15 @@ jobs:
         dotnet-version: 3.1
         # Optional package source for which to set up authentication. Will consult any existing NuGet.config in the root of the repo and provide a temporary NuGet.config using the NUGET_AUTH_TOKEN environment variable as a ClearTextPasswor
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@v2
+   
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+      
+    - name: Restore Project 
+      run: dotnet restore ASPNETCORE_ForContainering/ASPNETCORE_ForContainering.csproj
+      
+    - name: Build Project 
+      run: dotnet build ASPNETCORE_ForContainering/ASPNETCORE_ForContainering.csproj
 
       # Runs a single command using the runners shell
     - name: Show me the Directory
